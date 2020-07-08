@@ -121,6 +121,14 @@ class Pedido(models.Model):
         return str(self.id)
 
     @property
+    def shipping(self):
+        shipping = False
+        itemspedido = self.itempedido_set.all()
+        for i in itemspedido:
+            shipping = True
+        return shipping
+
+    @property
     def get_cart_total(self):
         itemspedido = self.itempedido_set.all()
         total = sum([item.get_total for item in itemspedido])

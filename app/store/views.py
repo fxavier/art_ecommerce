@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 import json
+import datetime
 
 from core.models import *
 
@@ -13,7 +14,7 @@ def store(request):
         cartItems = pedido.get_cart_items
     else:
         items = []
-        pedido = {'get_cart_tota':0, 'get_cart_items':0}
+        pedido = {'get_cart_tota':0, 'get_cart_items':0, 'shipping':False}
         cartItems = pedido['get_cart_items']
 
     produtos = Produto.objects.all()
@@ -29,7 +30,7 @@ def cart(request):
         cartItems = pedido.get_cart_items
     else:
         items = []
-        pedido = {'get_cart_tota':0, 'get_cart_items':0}
+        pedido = {'get_cart_tota':0, 'get_cart_items':0,'shipping':False}
         cartItems = pedido['get_cart_items']
 
     context = {'items': items, 'pedido':pedido, 'cartItems':cartItems}
@@ -43,7 +44,7 @@ def checkout(request):
         cartItems = pedido.get_cart_items
     else:
         items = []
-        pedido = {'get_cart_tota':0, 'get_cart_items':0}
+        pedido = {'get_cart_tota':0, 'get_cart_items':0,'shipping':False}
         cartItems = pedido['get_cart_items']
 
     context = {'items': items, 'pedido':pedido, 'cartItems': cartItems}
@@ -75,3 +76,33 @@ def updateItem(request):
         itemPedido.delete()
 
     return JsonResponse('Produto adicionado com sucesso', safe=False)
+
+
+def processarPedido(request):
+    transaction_id = datetime.datetime.now().timestamp()
+    data = json.loads(request.body)
+
+    if request.user.is_authenticated:
+        cliente = request.user.cliente
+        pedido, criado = Pedido.objects.get_or_create(cliente=cliente, concluido=False)
+        total = float(data['form']['total'])
+        pedido.transaction_id = transaction_id
+
+        if total == float(pedido.get_cart_total):
+            pedido.concluido = True
+        pedido.save()
+
+        if pedido.shipping == True:
+            EnderecoEntrega.objects.create(
+                cliente=cliente,
+                pedido=pedido,
+                endereco=data['shipping']['endereco'],
+                cidade=data['shipping']['cidade'],
+                bairro=data['shipping']['bairro'],
+                rua=data['shipping']['rua'],
+                numero=data['shipping']['numero'],
+            )
+
+    else:
+        print('User is not logged in')
+    return JsonResponse('Pagamento efectuado com sucesso', safe=False)
