@@ -7,18 +7,18 @@
 			<img class="thumbnail" src={{produto.imageURL}}>
 			<div class="box-element product">
 				<h6><strong>{{produto.nome}}</strong></h6>
+				<h6>{{produto.tecnica}}</h6>
+				<h6>Autor: {{produto.autor}}</h6>
+				<h6>Dimensões: {{produto.dimensoes}}</h6>
+				<h6>Tema: {{produto.tema}}</h6>
+				<h6>Ano: {{produto.ano}}</h6>
+				<h6>Preço: {{produto.preco|floatformat:2}} MT</h6>
 				<hr>
 
 				<button data-produto={{produto.id}} data-action="add" 
-				  class="btn btn-outline-secondary add-btn update-cart">Comprar</button>
+				  class="btn btn-outline-success add-btn update-cart">Comprar</button>
 				<a class="btn btn-outline-success view-btn" href="#">Ver</a>
-				<h4 style="display: inline-block; float: right">{{produto.preco|floatformat:2}} MT</h4>
-
 			</div>
 		</div>
-		 
 		 {% endfor %}
-
-		
-
 {% endblock content %}

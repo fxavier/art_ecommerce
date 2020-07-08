@@ -53,6 +53,10 @@ class Produto(models.Model):
     imagem = models.ImageField(upload_to=product_image_file_path, blank=True, null=True)
     stock = models.IntegerField()
     ano = models.IntegerField(null=True)
+    tema = models.CharField(max_length=200, null=True, blank=True)
+    autor = models.ForeignKey('Autor', on_delete=models.SET_NULL, null=True, blank=True)
+    tecnica = models.CharField(max_length=200, null=True, blank=True)
+    dimensoes = models.CharField(max_length=200, null=True, blank=True)
     disponivel = models.BooleanField(default=True)
     data_criacao = models.DateTimeField(auto_now_add=True)
     data_actualizacao = models.DateTimeField(auto_now=True)
@@ -79,34 +83,15 @@ class Produto(models.Model):
             url = ''
         return url
 
-
-""" class Carrinho(models.Model):
-    codigo = models.CharField(max_length=250, blank=True)
-    data_adicao = models.DateField(auto_now_add=True)
-
-    class Meta:
-        db_table = 'Carrinho'
-        ordering = ['data_adicao']
+class Autor(models.Model):
+    nome = models.CharField(max_length=200)
+    obras = models.CharField(max_length=500)
+    descricao = models.TextField()
 
     def __str__(self):
-        return self.codigo
+        return self.nome
     
-class ItemCarrinho(models.Model):
-    produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
-    carrinho = models.ForeignKey(Carrinho, on_delete=models.CASCADE)
-    quantidade = models.IntegerField()
-    activo = models.BooleanField(default=True)
 
-    class Meta:
-        db_table = 'ItemCarrinho'
-
-    def sub_total(self):
-        return self.produto.preco * self.quantidade
-
-    def __str__(self):
-        return self.produto.nome
-    
- """
 class Pedido(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.SET_NULL, blank=True, null=True)
     data_pedido = models.DateTimeField(auto_now_add=True)
