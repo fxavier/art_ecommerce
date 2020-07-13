@@ -1,0 +1,199 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Nyau Galeria </title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<meta name="keywords" content="Global Food Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- bootstrap-css -->
+<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" type="text/css" media="all" />
+<!--// bootstrap-css -->
+<!-- css -->
+<link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" media="all" />
+<!--// css -->
+<!-- font-awesome icons -->
+<link href="{% static 'css/font-awesome.css' %}" rel="stylesheet"> 
+<!-- //font-awesome icons -->
+{% comment %} <link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}" type="text/css" media="all">
+<link href="css/owl.theme.css" rel="stylesheet"> {% endcomment %}
+<!-- font -->
+<link href="//fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
+<link href="//fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
+<!-- //font -->
+<script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.js' %}"></script>
+<script type="text/javascript">
+	jQuery(document).ready(function($) {
+		$(".scroll").click(function(event){		
+			event.preventDefault();
+			$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+		});
+	});
+</script> 
+<!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<![endif]-->
+<script>
+$(document).ready(function() { 
+	$("#owl-demo").owlCarousel({
+ 
+		autoPlay: 3000, //Set AutoPlay to 3 seconds
+		autoPlay:true,
+		items : 3,
+		itemsDesktop : [640,5],
+		itemsDesktopSmall : [414,4]
+ 
+	});
+	
+}); 
+</script>
+<script type="text/javascript">
+		var user = '{{request.user}}'
+
+		function getToken(name) {
+		    let cookieValue = null;
+		    if (document.cookie && document.cookie !== '') {
+		        const cookies = document.cookie.split(';');
+		        for (let i = 0; i < cookies.length; i++) {
+		            const cookie = cookies[i].trim();
+		            // Does this cookie string begin with the name we want?
+		            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+		                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+		                break;
+		            }
+		        }
+		    }
+		    return cookieValue;
+		}
+		var csrftoken = getToken('csrftoken')
+
+		function getCookie(name) {
+			//Split cookie string and get all individual name=value pairs in an array
+			var cookieArr = document.cookie.split(";");
+
+			//Loop through the array elements
+			for (var i = 0; i < cookieArr.length; i++) {
+				var cookiePair = cookieArr[i].split("=");
+				if (name == cookiePair[0].trim()) {
+					return decodeURIComponent(cookiePair[1]);
+
+				}
+			}
+			//Return null if not found
+			return null;
+		}
+		var cart = JSON.parse(getCookie('cart'))
+		if (cart == undefined) {
+			cart = {}
+			console.log('Cart was created')
+			document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+		}
+		console.log('Cart:', cart)
+	
+</script>
+</head>
+<body>
+	<!-- banner -->
+	<div class="banner">
+		<div class="header">
+			<div class="container">
+				<div class="header-left">
+					<div class="w3layouts-logo">
+						<h1>
+							<a href="{% url 'home' %}">Nyau <span>Galeria</span><span> & Arte</span></a>
+						</h1>
+					</div>
+				</div>
+				<div class="header-right">
+					{% comment %} <p><i class="fa fa-map-marker" aria-hidden="true"></i> Av. Xxxxxxx, Maputo</p> {% endcomment %}
+					<div class="form-inline my-2 my-lg-0">
+					    <p id="cart-total">0</p>
+						<a href="{% url 'cart' %}">
+						<img  id="cart-icon" src="{% static 'images/cart.png' %}">
+						</a>
+					
+
+					</div>
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+		</div>
+		<div class="header-bottom">
+			<div class="container">
+				<div class="top-nav">
+						<nav class="navbar navbar-default">
+								<div class="navbar-header">
+									<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+										<span class="sr-only">Toggle navigation</span>
+										<span class="icon-bar"></span>
+										<span class="icon-bar"></span>
+										<span class="icon-bar"></span>
+									</button>
+								</div>
+							<!-- Collect the nav links, forms, and other content for toggling -->
+							<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+								<ul class="nav navbar-nav">
+									<li><a class="active list-border" href="{% url 'home' %}">Home</a></li>
+									<li><a href="{% url 'about' %}">Quem somos</a></li>
+									<li><a href="{% url 'home' %}">Todos produtos</a></li>
+									<li class="dropdown">
+										<a href="#" class="dropdown-toggle" data-hover="Pages" data-toggle="dropdown">Categorias <b class="caret"></b></a>
+										<ul class="dropdown-menu">
+										<li><a href="{% url 'home' %}">Todos Produtos</a></li>
+
+										{% for categoria in links %}
+										 <li><a href="{{categoria.get_url}}">{{categoria.nome}}</a></li>
+										{% endfor %}
+										</ul>
+									</li>
+									<li><a href="#">Contacto</a></li>
+								</ul>	
+								
+								<div class="clearfix"> </div>
+							</div>	
+						</nav>		
+				</div>
+			</div>
+		</div>
+	</div>
+{% block content %}
+
+{% endblock content %}
+{% include 'footer.html' %}
+<!-- //copyright -->
+	<script src="js/SmoothScroll.min.js"></script>
+	<script type="text/javascript" src="{% static 'js/move-top.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/easing.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+	<!-- here stars scrolling icon -->
+	<script type="text/javascript">
+		$(document).ready(function() {
+			/*
+				var defaults = {
+				containerID: 'toTop', // fading element id
+				containerHoverID: 'toTopHover', // fading element hover id
+				scrollSpeed: 1200,
+				easingType: 'linear' 
+				};
+			*/
+								
+			$().UItoTop({ easingType: 'easeOutQuart' });
+								
+			});
+	</script>
+	<!-- //here ends scrolling icon -->
+	<script src="{% static 'js/owl.carousel.js' %}"></script>
+	<script src="{% static 'js/jarallax.js' %}"></script>
+	<script type="text/javascript">
+				/* init Jarallax */
+				$('.jarallax').jarallax({
+					speed: 0.5,
+					imgWidth: 1366,
+					imgHeight: 768
+				})
+			</script>
+</body>	
+</html>

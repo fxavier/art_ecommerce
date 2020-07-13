@@ -1,7 +1,7 @@
 {% extends 'store/main.html' %}
 {% load static %}
 {% block content %}
-	<div class="row">
+	{% comment %} <div class="row">
 		<div class="col-lg-12">
 			<div class="box-element">
 
@@ -49,5 +49,113 @@
 				{% endfor %}
 			</div>
 		</div>
-	</div>
+	</div> {% endcomment %}
+	 {% if not cart_items %}
+    <div class="text-center">
+      <br>
+      <h1 class="text-center product_title">
+       O seu carrinho esta vazio
+      </h1>
+      <br>
+      <p class="text-center">
+        Por favor clique <a href="{% url 'home' %}">aqui</a> para continuar a comprar
+      </p>
+    </div>
+  {% else %}
+  <div class="text-center">
+    <br>
+    <div class="text-center product_title">
+      Seu carrinho de compras
+    </div>
+  </div>
+  <div class="row mx-auto">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-6 text-center">
+      <table class="table cart_table">
+        <thead class="cart_thead">
+          <tr>
+            <th colspan="4">
+              Seus itens
+            </th>
+          </tr>
+        </thead>
+        {% for item in items %}
+          <tr>
+            <td>
+              <a href="{% url 'cart' %}">
+                <img src="{{item.produto.imageURL}}" width="100" height="100" alt="">
+              </a>
+            </td>
+            <td class="text-left">
+              {{item.produto.nome}}
+              Preço unitario: ${{item.produto.preco|floatformat:2}} MT
+              <br>
+              Qtd: {{item.produto.quantidade}} x {{item.produto.preco}}
+            </td>
+            <td>
+              ${{total}}
+            </td>
+           {% comment %}  {% if cart_item.quantity < cart_item.product.stock %}
+            <td>
+              &nbsp;<a href="{% url 'add_cart' cart_item.product.id %}"><i class="fas fa-plus-circle cart_icon"></i></a>
+              &nbsp;<a href="{% url 'cart_remove' cart_item.product.id %}"><i class="fas fa-minus-circle cart_icon"></i></a>
+              &nbsp;<a href="{% url 'cart_remove_product' cart_item.product.id %}"><i class="fas fa-trash-alt cart_icon"></i></a>
+            </td>
+            {% else %}
+            <td>
+              &nbsp;<a href="{% url 'cart_remove' cart_item.product.id %}"><i class="fas fa-minus-circle cart_icon"></i></a>
+              &nbsp;<a href="{% url 'cart_remove_product' cart_item.product.id %}"><i class="fas fa-trash-alt cart_icon"></i></a>
+            </td>
+            {% endif %} {% endcomment %}
+          </tr>
+        {% endfor %}
+
+      </table>
+    </div>
+    <div class="col-12 col-sm-12 col-md-12 col-lg-6 text-center">
+      <table class="table cart_table">
+        <thead class="cart_thead">
+            <tr>
+              <th>
+                Check out
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                Por favor, verifique os seus items de compra antes de prosseguir com o pagamento.
+              </td>
+            </tr>
+            <tr>
+              <td class="text-left">
+                Total: <strong>${{total}}</strong>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        {% comment %} <div class="mx-auto">
+          <form class="" action="" method="POST">
+            {% csrf_token %}
+            <script src="https://checkout.stripe.com/checkout.js"
+            class="stripe-button"
+            data-key="{{ data_key }}"
+            data-amount="{{ stripe_total }}"
+            data-name="Z-Store"
+            data-description="{{ description }}"
+            data-locale="auto"
+            data-currency="usd"
+            data-shipping-address="true"
+            data-billing-address="true"
+            data-zip-code="true">
+            </script>
+          </form> {% endcomment %}
+          <a href="{% url 'home' %}" style="text-decoration: none;">
+            <button type="button" class="btn btn-lg btn-block bg-dark text-white">
+              Continue Comprando
+            </button>
+          </a>
+        </div>
+    </div>
+  </div>
+  {% endif %}
 {% endblock content %}

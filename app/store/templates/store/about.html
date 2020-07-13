@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- welcome -->
+	<div class="tabs">
+		<div class="container">
+			<div class="col-md-6 tabs-left">
+				<div class="col-xs-2 tab-grid-left"> <!-- required for floating -->
+					<!-- Nav tabs -->
+					 <ul class="nav nav-tabs">
+						<li class="active"><a href="#Tab1" data-toggle="tab">Missão</a></li>
+						<li><a href="#Tab2" data-toggle="tab">Visão</a></li>
+						<li><a href="#Tab3" data-toggle="tab">Valores</a></li>
+					</ul>
+				</div>
+				<div class="col-xs-10 tab-grid-right">
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div class="tab-pane active" id="Tab1">
+							<div class="w3-text">
+								<h3 class="title">Missão</h3>
+								<p class="text-justify product_text">Nossa missão é sempre trabalhar para atender à demanda do mercado com qualidade, sempre criando inovações e soluções em nossos produtos, através de diversos artistas e canais de distribuição.</p>
+							</div>
+						</div>
+						<div class="tab-pane" id="Tab2">
+							<div class="w3-text">
+								<h3 class="title">Visão</h3>
+								<p class="text-justify product_text">Liderar o mercado de venda de produtos de arte em Moçambique; sempre buscando um relacionamento saudável entre clientes, parceiros, meio ambiente, governo e sociedade.</p>
+							</div>
+						</div>
+						<div class="tab-pane" id="Tab3">
+							<div class="w3-text">
+								<h3 class="title">Valores</h3>
+								<p class="text-justify product_text">Sempre priorizar a qualidade - Compromisso - Ter um relacionamento de comércio saudável com pessoas, clientes, sociedade, meio ambiente, funcionários e organizações – Superar os resultados esperados - Valorização humana - Melhoria contínua – Sustentabilidade</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+			<div class="col-md-6 tabs-right ">
+				<img class="thumbnail"  src="{% static 'images/picture.jpg' %}" alt="">
+			</div>
+			<div class="clearfix"> </div>
+		</div>
+	</div>
+	<!-- //welcome -->
+	<!-- welcome-bottom -->
+	<div class="welcome-bottom">
+		<div class="container">
+			<div class="wthree-welcome-bottom-grids">
+				<div class="col-md-6 wthree-welcome-bottom-left">
+					<h4>Breve descrição da arte moçambicana</h4>
+					<p class="text-justify product_text">Moçambique, é um país localizado no sudeste do Continente Africano, banhado pelo Oceano Índico a leste e que faz fronteira com a Tanzânia ao norte; Malawi e Zâmbia a noroeste; Zimbabwe a oeste e Essuatíni e África do Sul a sudoeste. A capital e maior cidade do país é Maputo, anteriormente chamada de Lourenço Marques, durante o domínio português.
+					 <span>Em termos de Cultura, Moçambique é reconhecido pelos seus artistas plásticos: escultores (principalmente da etnia Makonde) e pintores (inclusive em tecido, técnica batik). Artistas como Malangatana, Gemuce, Naguib, Ismael Abdula, Samat e Idasse destacam-se 
+					   na área de pintura. A música vocal moçambicana também impressiona os visitantes. A timbila chope foi considerada Património Mundial.
+                       Os macondes são famosos por suas máscaras e esculturas elaboradas de madeira, que são geralmente usadas em danças tradicionais. Existem dois tipos diferentes de esculturas em madeira: as shetani (espíritos malignos), que são em sua maioria esculpidas em ébano, e as ujamaa, que são esculturas em forma de totem que ilustram rostos realistas de pessoas e de várias figuras. Essas esculturas são geralmente referidas como "árvores genealógicas", porque contam histórias de muitas gerações.
+                       Durante os últimos anos do período colonial, a arte moçambicana refletiu a opressão pelo poder colonial e tornou-se símbolo da resistência. Após a independência em 1975, a arte moderna passou para uma nova fase. Os dois artistas moçambicanos contemporâneos mais conhecidos e mais influentes são o pintor Malangatana Ngwenya e o escultor Alberto Chissano. Uma boa parte da arte pós- independência, durante os anos 1980 e 1990, reflete a luta política, a guerra civil, o sofrimento, a fome e a luta.
+                    </span>
+					</p>
+				</div >
+				<div class="col-md-6 wthree-welcome-bottom-left">
+					<h4>A origem do nome Nyau</h4>
+					<p class="text-justify product_text">Moçambique é caracterizado por uma grande diversidade cultural resultante da miscigenação de vários povos, que ao longo dos séculos aportaram por estas terras.
+					 <span>
+					  O Nyau é uma das expressões artísticas que corporizam o rico mosaico cultural nacional, sendo simultaneamente uma dança e um ritual. O Nyau é praticado pelo povo
+					  Chewa, que se encontra radicado em três países da África Austral, nomeadamente, Moçambique, Malawi e Zâmbia. Em Moçambique esta expressão cultural tem maior 
+					  concentração dos seus praticantes na Província Central de Tete. Revelando o seu carácter singular, o Nyau extravasa a dimensão de espectáculo que proporciona em 
+					  virtude dos valores que ele insere nos domínios das artes e das técnicas, da história e da cultura, valores esses transmitidos ao longo dos séculos, por gerações.
+					  Aliado ao carácter ritualístico, que se traduz na realização de um conjunto de discursos e práticas rígidas, carregadas de grande simbolismo, esta manifestação 
+					  comporta outra dimensão de valor ao nível da educação dos jovens, servindo como meio de integração social e ajustamento dos comportamentos dos indivíduos às suas 
+					  raízes culturais. 
+					 </span>
+					 <span>
+					  Em reconhecimento do grande valor histórico e sócio-cultural do Nyau, Moçambique, Malawi e Zâmbia submeteram à UNESCO a candidatura a Património Cultural, tendo sido
+					  proclamada a 25 de Novembro de 2005, Obra-Prima do Património Oral e Intangível da Humanidade. Em Moçambique, a proclamação do Nyau e da Timbila, como “Património da
+					  Humanidade”, vieram associar-se à Ilha de Moçambique que teve, igualmente, o mais alto reconhecimento e distinção por parte da UNESCO, em 1991. Estes actos elevaram o 
+					  nome de Moçambique ao mais alto nível no concerto das Nações.
+					 </span>
+					</p>
+				</div >
+				<div class="clearfix"> </div>
+			</div>
+		</div>
+	</div>
+{% endblock content %}	

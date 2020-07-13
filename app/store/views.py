@@ -1,10 +1,35 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 import json
 import datetime
 
 from core.models import *
 
+
+
+def home(request, categoria_slug=None):
+    categoria_pagina = None
+    produtos = None
+    if categoria_slug!=None:
+        categoria_pagina = get_object_or_404(Categoria, slug=categoria_slug)
+        produtos = Produto.objects.filter(categoria=categoria_pagina)
+    else:
+        produtos = Produto.objects.all()
+    context = {'categoria': categoria_pagina, 'produtos': produtos, 'cartItems':cartItems}
+    return render(request, 'store/home.html', context)
+
+
+def produtoPagina(request, categoria_slug, produto_slug):
+    try:
+        produto = Produto.objects.get(categoria__slug=categoria_slug, slug=produto_slug)
+    except expression as e:
+        raise e 
+    context = {'produto': produto, 'cartItems':0}
+    return render(request, 'store/produto_detalhe.html', context)
+
+def about(request):
+    context = {}
+    return render(request, 'store/about.html')
 
 def store(request):
     if request.user.is_authenticated:

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<br/>
+ <div class="container py-5">
+   <div class="row mt-5">
+     <div class="col-10 mx-auto col-md-6 my-5">
+       <img class="thumbnail-item" src="{{produto.imageURL}}" alt="">
+     </div>
+       <div>
+         <h1 class="product_title">{{produto.nome}}</h1>
+         <p><strong>Preço: {{produto.preco|floatformat:2}} MT </strong></p>
+         <p class="produto_tecnica">{{produto.tecnica}}</p>
+         <p class="produto_autor">Autor: {{produto.autor}}</p>
+         <p class="produto_dimensoes">Dimensões: {{produto.dimensoes}}</p>
+         <p class="produto_tecnica">Tema: {{produto.tema}}</p>
+         <p class="produto_ano">Ano: {{produto.ano}}</p>
+         <p class="text-justify product_text">{{produto.descricao}}</p>
+         <span>
+             <a data-produto={{produto.id}} data-action="add" class="btn add-btn update-cart" href="{{produto.get_url}}">Comprar</a>
+         </span>
+       </div>
+   </div>
+</div> 
+</br>
+{% endblock content %}

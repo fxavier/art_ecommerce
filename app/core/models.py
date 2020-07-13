@@ -3,6 +3,7 @@ import os
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
+from django.urls import reverse
 
 
 def product_image_file_path(instance, filename):
@@ -28,7 +29,20 @@ CIDADES = (
 
 class Categoria(models.Model):
     nome = models.CharField(max_length=250, unique=True)
+    slug = models.SlugField(max_length=250, null=True, blank=True)
     descricao = models.TextField(blank=True)
+
+    def get_url(self):
+        return reverse('produtos_por_categoria', args=[self.slug])
+
+    def save(self, *args, **kwargs):
+        if not self.slug and self.nome:
+            self.slug = slugify(self.nome)
+        super(Categoria, self).save(*args, **kwargs)
+
+    
+    def get_url(self):
+        return reverse('produtos_por_categoria', args=[self.slug])
 
 
     def __str__(self):
@@ -70,7 +84,7 @@ class Produto(models.Model):
         super(Produto, self).save(*args, **kwargs)
 
     def get_url(self):
-        return reverse('detalhe_produto', args=[self.categoria.slug, self.slug])
+        return reverse('produto_detalhe', args=[self.categoria.slug, self.slug])
 
     def __str__(self):
         return self.nome
@@ -85,8 +99,8 @@ class Produto(models.Model):
 
 class Autor(models.Model):
     nome = models.CharField(max_length=200)
-    obras = models.CharField(max_length=500)
-    descricao = models.TextField()
+    obras = models.CharField(max_length=500, null=True, blank=True)
+    descricao = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.nome
@@ -162,4 +176,31 @@ class EnderecoEntrega(models.Model):
 
     def __str__(self):
         return self.endereco
+
+class Cart(models.Model):
+    cart_id = models.CharField(max_length=250, blank=True)
+    date_added = models.DateField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'Cart'
+        ordering = ['date_added']
+
+    def __str__(self):
+        return self.cart_id
+
+
+class CartItem(models.Model):
+    produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    quantidade = models.IntegerField()
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        db_table = 'CartItem'
+
+    def sub_total(self):
+        return self.produto.preco * self.quantidade
+
+    def __str__(self):
+        return self.produto.nome
     

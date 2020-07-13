@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% include 'banner.html' %}
+{% block content %}
+ <div class="py-4">
+   <div class="container">
+    <div class="row">
+      <div class="col-10 mx-auto my-2 text-center">
+        <h1 class="text-capitalize font-weight-bold">
+         {% if categoria is None %}
+          <h3 class="product_title"> Todos os produtos </h3>
+          {% else %}
+          <h3 class="product_title">{{categoria.nome}}</h3>
+         {% endif %}
+          
+        </h1>
+      </div>
+    </div>
+   </div>
+ </div>
+
+ <div class="container">
+   <div class="row">
+     {% for produto in produtos %}
+       <div class="col-9 mx-auto col-md-6 col-lg-3">
+         <div class="card mb-5">
+          <div class="p-4">
+            <img src="{{produto.imageURL}}" class="card-img-top thumbnail "alt="">
+          </div>
+          <div class="card-footer d-flex justify-content-between" 
+           style="border-color: transparent;">
+            <p class="font-weight-bold mb-0">
+              {{produto.nome}}
+            </p>
+            <h5 class="text-info mb-0">
+            <span class="mr-1">Preço: <strong>{{produto.preco|floatformat:2}}</span> MT </strong>
+            <span>
+             <a class="btn view-btn" href="{{produto.get_url}}">Ver</a>
+            </span>
+            </h5>
+          </div>
+         </div>
+       </div>  
+       {% endfor %}
+
+   </div>
+ </div>
+ <br/>
+{% endblock content %}
