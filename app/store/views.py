@@ -1,5 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
+from django.core.exceptions import ObjectDoesNotExist
+import stripe
+from django.conf import settings
+
 import json
 import datetime
 
@@ -15,7 +19,7 @@ def home(request, categoria_slug=None):
         produtos = Produto.objects.filter(categoria=categoria_pagina)
     else:
         produtos = Produto.objects.all()
-    context = {'categoria': categoria_pagina, 'produtos': produtos, 'cartItems':cartItems}
+    context = {'categoria': categoria_pagina, 'produtos': produtos}
     return render(request, 'store/home.html', context)
 
 
@@ -24,7 +28,7 @@ def produtoPagina(request, categoria_slug, produto_slug):
         produto = Produto.objects.get(categoria__slug=categoria_slug, slug=produto_slug)
     except expression as e:
         raise e 
-    context = {'produto': produto, 'cartItems':0}
+    context = {'produto': produto}
     return render(request, 'store/produto_detalhe.html', context)
 
 def about(request):
@@ -46,9 +50,9 @@ def store(request):
     context = {'produtos':produtos, 'cartItems':cartItems}
     return render(request, 'store/store.html', context)
 
-def cart(request):
+# def cart(request):
 
-    if request.user.is_authenticated:
+    """ if request.user.is_authenticated:
         cliente = request.user.cliente
         pedido, criado = Pedido.objects.get_or_create(cliente=cliente, concluido=False)
         items = pedido.itempedido_set.all()
@@ -58,8 +62,76 @@ def cart(request):
         pedido = {'get_cart_tota':0, 'get_cart_items':0,'shipping':False}
         cartItems = pedido['get_cart_items']
 
-    context = {'items': items, 'pedido':pedido, 'cartItems':cartItems}
-    return render(request, 'store/cart.html', context)
+    context = {'items': items, 'pedido':pedido, 'cartItems':cartItems} """
+  #  context = {}
+  #  return render(request, 'store/cart.html', context)
+
+def _cart_id(request):
+    cart = request.session.session_key
+    if not cart:
+        cart = request.session.create()
+    return cart
+
+def add_cart(request, produto_id):
+    produto = Produto.objects.get(id=produto_id)
+    try:
+        cart = Cart.objects.get(cart_id=_cart_id(request))
+    except Cart.DoesNotExist:
+        cart = Cart.objects.create(
+            cart_id=_cart_id(request)
+            )
+        cart.save()
+    try:
+        cart_item = CartItem.objects.get(produto=produto, cart=cart)
+        if cart_item.quantidade < cart_item.produto.stock:
+            cart_item.quantidade += 1
+        cart_item.save()
+    except CartItem.DoesNotExist:
+        cart_item = CartItem.objects.create(
+            produto=produto,
+            quantidade=1,
+            cart=cart
+            )
+        cart_item.save()
+
+    return redirect('cart')
+
+
+def cart(request, total=0, counter=0, cart_items=None):
+    try:
+        cart = Cart.objects.get(cart_id=_cart_id(request))
+        cart_items = CartItem.objects.filter(cart=cart, active=True)
+        for cart_item in cart_items:
+            total += (cart_item.produto.preco * cart_item.quantidade)
+            counter += cart_item.quantidade
+    except ObjectDoesNotExist:
+        pass
+
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    stripe_total = int(total * 100)
+    description = 'Nyau Galeria - Novo Pedido'
+    data_key = settings.STRIPE_PUBLISHABLE_KEY
+    
+    return render(request, 'store/cart.html', dict(cart_items=cart_items, total=total, counter=counter, data_key=data_key, stripe_total=stripe_total, description=description))
+
+
+def cart_remove(request, produto_id):
+    cart = Cart.objects.get(cart_id=_cart_id(request))
+    produto = get_object_or_404(Produto, id=produto_id)
+    cart_item = CartItem.objects.get(produto=produto, cart=cart)
+    if cart_item.quantidade > 1:
+        cart_item.quantidade -= 1
+        cart_item.save()
+    else:
+        cart_item.delete()
+    return redirect('cart')
+
+def cart_remove_produto(request, produto_id):
+    cart = Cart.objects.get(cart_id=_cart_id(request))
+    produto = get_object_or_404(Produto, id=produto_id)
+    cart_item = CartItem.objects.get(produto=produto, cart=cart)
+    cart_item.delete()
+    return redirect('cart')
 
 def checkout(request):
     if request.user.is_authenticated:
@@ -76,7 +148,7 @@ def checkout(request):
     return render(request, 'store/checkout.html', context)
 
 
-def updateItem(request):
+""" def updateItem(request):
     data = json.loads(request.body)
     produtoId = data['produtoId']
     action = data['action']
@@ -100,10 +172,10 @@ def updateItem(request):
     if itemPedido.quantidade <= 0:
         itemPedido.delete()
 
-    return JsonResponse('Produto adicionado com sucesso', safe=False)
+    return JsonResponse('Produto adicionado com sucesso', safe=False) """
 
 
-def processarPedido(request):
+""" def processarPedido(request):
     transaction_id = datetime.datetime.now().timestamp()
     data = json.loads(request.body)
 
@@ -130,4 +202,4 @@ def processarPedido(request):
 
     else:
         print('User is not logged in')
-    return JsonResponse('Pagamento efectuado com sucesso', safe=False)
+    return JsonResponse('Pagamento efectuado com sucesso', safe=False) """

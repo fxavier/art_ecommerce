@@ -16,9 +16,14 @@
          <p class="produto_tecnica">Tema: {{produto.tema}}</p>
          <p class="produto_ano">Ano: {{produto.ano}}</p>
          <p class="text-justify product_text">{{produto.descricao}}</p>
-         <span>
-             <a data-produto={{produto.id}} data-action="add" class="btn add-btn update-cart" href="{{produto.get_url}}">Comprar</a>
-         </span>
+         <a href="{% url 'add_cart' produto.id %}" style="text-decoration: none;">
+            <button type="button" class="btn btn-shop-detail btn-lg btn-block bg-dark text-white">
+              Comprar
+            </button>
+          </a>
+         {% comment %} <span>
+             <a class="btn add-btn update-cart" href="{% url 'add_cart' produto.id %}">Comprar</a>
+         </span> {% endcomment %}
        </div>
    </div>
 </div> 

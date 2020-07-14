@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'store',
+    'stripe',
 ]
 
 MIDDLEWARE = [
@@ -65,6 +66,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'store.context_processors.menu_links',
+                'store.context_processors.counter',
             ],
         },
     },
@@ -134,8 +136,5 @@ STATICFILES_DIRS = [
 MEDIA_ROOT = 'vol/web/media'
 STATIC_ROOT = 'vol/web/static'
 
-#MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
-
-
-# STATICFILES = [os.path.join(BASE_DIR, 'static')]
-
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51H4nM6Gh0BVpMlhn16b2DpRlp3cJ64a90Hm2vqZXVxfk746ifKJALpSM6QmYHcfgHUiysp06whq0vXworfscTSLe00geBbnwMo'
+STRIPE_SECRET_KEY = 'sk_test_51H4nM6Gh0BVpMlhncY8sBtRLhNhjntcZcq1Pt50xHjptMU4muVDhWIhpmN5IpPioMTZkcy08iOXCWBKpotlOZw4C00MgTzQZxH'
